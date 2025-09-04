@@ -275,7 +275,7 @@ internal sealed class IntroducePropertyAdvice : IntroduceMemberAdvice<IProperty,
             }
             else if ( !builder.Type.Equals( existingProperty.Type ) )
             {
-                var isCovariant = 
+                var isCovariant = false &&
                     existingProperty.IsVirtual
                     && existingProperty.GetMethod != null && builder.GetMethod != null
                     && existingProperty.SetMethod == null && builder.SetMethod == null
