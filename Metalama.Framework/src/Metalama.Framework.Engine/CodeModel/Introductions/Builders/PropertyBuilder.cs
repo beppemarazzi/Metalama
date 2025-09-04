@@ -148,8 +148,7 @@ internal sealed class PropertyBuilder : PropertyOrIndexerBuilder, IPropertyBuild
 
     public bool? IsDesignTimeObservableOverride { get; init; }
 
-    //public override bool IsDesignTimeObservable => this.IsDesignTimeObservableOverride ?? (base.IsDesignTimeObservable || this.GetMethod?.IsCovariantReturnType() == true);
-    public override bool IsDesignTimeObservable => this.IsDesignTimeObservableOverride ?? base.IsDesignTimeObservable;
+    public override bool IsDesignTimeObservable => this.IsDesignTimeObservableOverride ?? (base.IsDesignTimeObservable || this.GetMethod?.IsCovariantReturnType() == true);
 
     public override SyntaxTree? PrimarySyntaxTree => this.OriginalField?.GetPrimarySyntaxTree() ?? base.PrimarySyntaxTree;
 }
