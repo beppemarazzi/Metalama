@@ -275,13 +275,22 @@ internal sealed class IntroducePropertyAdvice : IntroduceMemberAdvice<IProperty,
             }
             else if ( !builder.Type.Equals( existingProperty.Type ) )
             {
-                return
-                    this.CreateFailedResult(
-                        AdviceDiagnosticDescriptors.CannotIntroduceDifferentExistingReturnType.CreateRoslynDiagnostic(
-                            targetDeclaration.GetDiagnosticLocation(),
-                            (this.AspectInstance.AspectClass.ShortName, builder, targetDeclaration,
-                             existingProperty.DeclaringType, existingProperty.Type),
-                            this ) );
+                var isCovariant = 
+                    existingProperty.IsVirtual
+                    && existingProperty.GetMethod != null && builder.GetMethod != null
+                    && existingProperty.SetMethod == null && builder.SetMethod == null
+                    && !builder.Type.Equals( existingProperty.Type )
+                    && builder.Type.IsConvertibleTo( existingProperty.Type, ConversionKind.Reference );
+                if (!isCovariant )
+                {
+                    return
+                        this.CreateFailedResult(
+                            AdviceDiagnosticDescriptors.CannotIntroduceDifferentExistingReturnType.CreateRoslynDiagnostic(
+                                targetDeclaration.GetDiagnosticLocation(),
+                                (this.AspectInstance.AspectClass.ShortName, builder, targetDeclaration,
+                                 existingProperty.DeclaringType, existingProperty.Type),
+                                this ) );
+                }
             }
 
             switch ( this.OverrideStrategy )
